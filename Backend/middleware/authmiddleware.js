@@ -12,7 +12,7 @@ const checkAuth = async (req, res, next) => {
     try {
         token = req.headers.authorization.split(" ")[1];
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.Veterinario = await Veterinario.findById(decoded.id).select(
+        req.veterinario = await Veterinario.findById(decoded.id).select(
         "-password -token -confirmado"
     );
     return next();
