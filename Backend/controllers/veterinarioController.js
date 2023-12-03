@@ -28,6 +28,12 @@ const registrar = async (req, res) => {
     }   
 };
 
+const perfil = (req, res) => {
+    console.log(req.veterinario);
+    res.json({ msg: "Mostrando perfil" });
+};
+
+
 const confirmar = async (req, res) => {
     const { token } = req.params
 
@@ -76,10 +82,6 @@ const autenticar = async (req, res) => {
         return res.status(403).json({ mes: error.message })
     }    
 };
-
-const perfil = (req, res) => {
-    res.json({ msg: "Mostrando perfil" });
-}
 
 
 export { registrar, perfil, confirmar, autenticar };
