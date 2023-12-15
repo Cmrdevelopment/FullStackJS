@@ -1,4 +1,4 @@
-
+import { Link } from "react-router-dom"
 
 const Login = () => {
   return (
@@ -6,10 +6,10 @@ const Login = () => {
     
         <div>
             <h1 className="text-indigo-600 font-black text-6xl"> 
-            Inicia Sesión y Administra tus 
-            <span className="text-black"> Pacientes</span></h1>
+            Inicia Sesión y Administra tus {""}
+            <span className="text-black">Pacientes</span></h1>
         </div>
-        <div>
+        <div className="mt-20 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white">
            <form>
             <div className="my-5">
                 <label
@@ -42,6 +42,18 @@ const Login = () => {
             className="bg-indigo-700 w-full py-3 px-10 rounded-xl text-white uppercase font-bold mt-5 hover:cursor-pointer hover:bg-indigo-800 md:w-auto"
             />
            </form>
+
+           <nav className="mt-10 lg:flex lg:justify-between">
+            {/* <a href="/registrar">¿No tienes una cuenta?</a> esto es un linñ tradicional*/}
+            {/* Pero ponemos el Link desde react-router-dom  */}
+            
+            <Link className="block text-center my-5 text-gray-500" 
+                to="/registrar" >¿No tienes una cuenta? Regístrate</Link>
+            <Link className="block text-center my-5 text-gray-500"
+                to="/olvide-password" >Olvide mi Password</Link>
+           </nav>
+
+        
         </div>
     
     </>
