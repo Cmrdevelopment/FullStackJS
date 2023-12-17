@@ -1,11 +1,13 @@
 import Veterinario from "../models/Veterinario.js";
 import generarJWT from "../helpers/generarJWT.js";
 import generarId from "../helpers/generarid.js";
+import emailRegistro from "../helpers/emailRegistro.js";
+import emailOlvidePassword from "../helpers/emailOlvidePassword.js";
 
 
 
 const registrar = async (req, res) => {
-    const { email } = req.body;
+    const { email, nombre } = req.body;
     
     // Prevenir usuarios duplicado
     const existeUsuario = await Veterinario.findOne({email: email})
@@ -15,11 +17,17 @@ const registrar = async (req, res) => {
         return res.status(400).json({msg: error.message})
     }
 
-
     try {
         // Guardar un nuevo veterinario
         const veterinario = new Veterinario(req.body)
         const veterinarioGuardado = await veterinario.save();
+
+        // Enviar el email 
+        emailRegistro({
+            email, 
+            nombre, 
+            token: veterinarioGuardado.token
+        });
 
         res.json(veterinarioGuardado)
 
@@ -87,7 +95,6 @@ const autenticar = async (req, res) => {
 
 const olvidePassword = async (req, res) => {
     const { email } = req.body
-
     const existeVeterinario = await Veterinario.findOne({email})
     if(!existeVeterinario) {
     const error = new Error("El Usuario no existe");
@@ -97,8 +104,15 @@ const olvidePassword = async (req, res) => {
     try {
         existeVeterinario.token = generarId()
         await existeVeterinario.save()
-        res.json({ msg: "Hemos enviado un email con las instrucciones" })
-        
+
+        // Enviar Email con instruccones
+        emailOlvidePassword({
+            email,
+            nombre: existeVeterinario.nombre,
+            token: existeVeterinario.token 
+        })
+
+        res.json({ msg: "Hemos enviado un email con las instrucciones" })        
     } catch (error) {
         console.log(error);
     }
