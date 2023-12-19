@@ -5,15 +5,18 @@ const AuthContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
-    
+
+    const [cargando, setCargando] = useState(true);     
     const [auth, setAuth] = useState({});
 
     useEffect(() => {
         const autenticarUsuario = async ()  => {
             const token = localStorage.getItem('token')
             
-            if(!token) return
-
+            if(!token) {
+                setCargando(false)
+                return
+            }
             const config = {
                 headers: {
                     "Content-Type": "application/json",
@@ -22,29 +25,38 @@ const AuthProvider = ({ children }) => {
             }
 
             try {
-                const { data } = await clienteAxios('/veterinarios/perfil', config)  
-
+                const { data } = await clienteAxios('/veterinarios/perfil', 
+                config)
                 setAuth(data)
             } catch (error) {                
                 console.log(error.response.data.msg);
                 setAuth({})
             }
+
+            setCargando(false)
         
         }
         autenticarUsuario();
     }, [])
 
-return (
-    <AuthContext.Provider
-    value={{
-        auth,
-        setAuth
-    }}
-    >
-    {children}
-    </AuthContext.Provider>
-    )
-}
+    const cerrarSesión = () => {
+        localStorage.removeItem('token')
+        setAuth({})
+    }
+
+    return (
+        <AuthContext.Provider
+        value={{
+            auth,
+            setAuth,
+            cargando,
+            cerrarSesión
+        }}
+        >
+        {children}
+        </AuthContext.Provider>
+        )
+    }
 
 export { 
     AuthProvider 
