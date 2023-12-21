@@ -1,8 +1,10 @@
 
-
+import usePacientes  from "../hooks/usePacientes";
 
 // eslint-disable-next-line react/prop-types
 const Paciente = ({paciente}) => {
+
+    const { setEdicion, eliminarPaciente } = usePacientes()
 
     // eslint-disable-next-line react/prop-types, no-unused-vars
     const { email, fecha, nombre, propietario, sintomas, _id } = paciente
@@ -38,10 +40,12 @@ const Paciente = ({paciente}) => {
             <button
                 type="button"
                 className="py-2 px-10 bg-indigo-600 hover:bg-indigo-700 text-white uppercase font-bold rounded-lg"
+                onClick={() => setEdicion(paciente)}
                 >Editar</button>
                 <button
                 type="button"
                 className="py-2 px-10 bg-red-600 hover:bg-red-700 text-white uppercase font-bold rounded-lg"
+                onClick={() => eliminarPaciente(_id)}
                 >Eliminar</button>
         </div>
     </div>
